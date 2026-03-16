@@ -1,0 +1,54 @@
+[
+  {
+    "id": "curious",
+    "label": "West AVL Curious",
+    "threshold": 3,
+    "type": "core",
+    "icon": "☕",
+    "color": "#8B5E3C",
+    "description": "You've started walking the road.",
+    "compostela": false
+  },
+  {
+    "id": "regular",
+    "label": "Haywood Regular",
+    "threshold": 7,
+    "type": "core",
+    "icon": "🏘",
+    "color": "#b84c1a",
+    "description": "Seven in. You're becoming a local.",
+    "compostela": false
+  },
+  {
+    "id": "local",
+    "label": "True Local",
+    "threshold": 10,
+    "type": "core",
+    "icon": "⭐",
+    "color": "#c8973a",
+    "description": "You walked all of Haywood Road. This is yours.",
+    "compostela": true
+  },
+  {
+    "id": "devotee",
+    "label": "Haywood Devotee",
+    "threshold": 3,
+    "type": "bonus",
+    "icon": "🗺",
+    "color": "#1A3A6A",
+    "description": "You found the hidden ones too. Not everyone does.",
+    "compostela": false,
+    "note": "Unlocked by collecting all bonus stamps — OWL, Flora/Forage, Firestorm, Mocha Box"
+  },
+  {
+    "id": "hygge",
+    "label": "Hygge Five",
+    "threshold": 5,
+    "type": "special",
+    "icon": "🕯",
+    "color": "#5a7a4a",
+    "description": "The five warmest rooms on Haywood Road. You found all of them.",
+    "compostela": false,
+    "note": "Unlocked by stamping all five hygge:true shops — Rowan, Bad Manners, Odd's, OWL, Forage at Flora"
+  }
+]

@@ -1,0 +1,83 @@
+[
+  {
+    "id": "coffee",
+    "label": "Coffee",
+    "color": "#8B5E3C",
+    "bg": "#F5EDD8",
+    "icon": "☕",
+    "passportLayer": true,
+    "description": "The 10 core passport stops plus bonus hidden stamps"
+  },
+  {
+    "id": "bakery",
+    "label": "Bakery",
+    "color": "#c8973a",
+    "bg": "#FDF3DC",
+    "icon": "🥐",
+    "passportLayer": false,
+    "description": "Bakeries with espresso bars — their own thing on Haywood"
+  },
+  {
+    "id": "bars",
+    "label": "Bars & Brew",
+    "color": "#2A6090",
+    "bg": "#E6F1FB",
+    "icon": "🍺",
+    "passportLayer": false,
+    "description": "Breweries, cocktail bars, wine bars, bottle shops"
+  },
+  {
+    "id": "food",
+    "label": "Food",
+    "color": "#2A7A4A",
+    "bg": "#EAF3DE",
+    "icon": "🍽",
+    "passportLayer": false,
+    "description": "Restaurants and eateries"
+  },
+  {
+    "id": "tattoo",
+    "label": "Tattoo",
+    "color": "#7A2A7A",
+    "bg": "#F5E6F5",
+    "icon": "🖋",
+    "passportLayer": false,
+    "description": "Tattoo studios — West AVL has an extraordinary concentration"
+  },
+  {
+    "id": "cannabis",
+    "label": "Cannabis",
+    "color": "#3A7A3A",
+    "bg": "#E6F3E6",
+    "icon": "🌿",
+    "passportLayer": false,
+    "description": "Hemp, CBD, and cannabinoid shops"
+  },
+  {
+    "id": "clothing",
+    "label": "Clothing",
+    "color": "#C04A1A",
+    "bg": "#FAECE7",
+    "icon": "👗",
+    "passportLayer": false,
+    "description": "Vintage, consignment, and independent clothing boutiques"
+  },
+  {
+    "id": "books",
+    "label": "Books",
+    "color": "#1A3A6A",
+    "bg": "#E6EDF8",
+    "icon": "📖",
+    "passportLayer": false,
+    "description": "Bookstores — Haywood has three, each completely different"
+  },
+  {
+    "id": "plants",
+    "label": "Plants",
+    "color": "#2a6b2a",
+    "bg": "#E8F5E8",
+    "icon": "🌱",
+    "passportLayer": false,
+    "description": "Plant shops and botanical spaces"
+  }
+]

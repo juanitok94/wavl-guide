@@ -1,65 +1,200 @@
-import Image from "next/image";
+import Link from 'next/link'
+import shopsData from '@/data/shops.json'
+import layersData from '@/data/layers.json'
+
+const shops = shopsData as any[]
+const layers = layersData as any[]
+
+const coreStops = shops
+  .filter(s => s.passportType === 'core')
+  .sort((a, b) => a.passportStop - b.passportStop)
+
+const hyggieFive = shops.filter(s => s.hygge === true)
 
 export default function Home() {
   return (
-    <div className="flex min-h-screen items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex min-h-screen w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.tsx file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
+    <main className="min-h-screen bg-[#f5edd8] text-[#1a1208]">
+
+      {/* HEADER */}
+      <div className="bg-[#3b1f0a] px-6 py-10 text-center border-b-4 border-[#c8973a]">
+        <p className="text-[#c8973a] text-xs tracking-[0.3em] uppercase mb-2 font-mono">
+           Haywood Road · West Asheville, NC
+        </p>
+        <h1 className="font-serif text-5xl font-black text-[#f5edd8] leading-none">
+          Haywood
+        </h1>
+        <h2 className="font-serif text-4xl italic text-[#c8973a] leading-none mt-1">
+          Hoppers
+        </h2>
+        <p className="text-[#e8d9b8] text-sm italic mt-3 opacity-70">
+          A coffee passport for the neighborhood
+        </p>
+        <div className="flex items-center justify-center gap-3 mt-4 text-[#c8973a] opacity-50 text-sm">
+          <span>☕</span><span>✦</span><span>☕</span>
+        </div>
+      </div>
+
+      {/* INTRO */}
+      <div className="max-w-lg mx-auto px-6 py-10">
+        <p className="font-serif text-lg leading-relaxed text-[#3b1f0a]">
+          Haywood Road has been the spine of West Asheville for over a century —
+          built along the old Western Turnpike toward Haywood County.
+          Today it's home to ten of the most distinct coffee shops in the mountains.
+        </p>
+        <p className="font-serif text-lg leading-relaxed text-[#3b1f0a] mt-4">
+          This passport is your guide. Walk east to west.
+          The road gets quieter south of I-240. That's not a warning — it's the point.
+        </p>
+
+        {/* CTA */}
+        <Link
+          href="/passport"
+          className="block w-full mt-8 py-4 bg-[#6b3f1e] text-[#f5edd8] text-center
+                     font-mono text-sm tracking-widest uppercase rounded-sm
+                     shadow-[3px_3px_0_#3b1f0a] hover:translate-x-[-1px]
+                     hover:translate-y-[-1px] hover:shadow-[4px_4px_0_#3b1f0a]
+                     transition-all"
+        >
+          Start Your Passport
+        </Link>
+
+        <Link
+          href="/map"
+          className="block w-full mt-3 py-4 border border-[#6b3f1e] text-[#6b3f1e]
+                     text-center font-mono text-sm tracking-widest uppercase rounded-sm
+                     hover:bg-[#6b3f1e] hover:text-[#f5edd8] transition-all"
+        >
+          Explore the Map
+        </Link>
+      </div>
+
+      {/* THE ROUTE */}
+      <div className="max-w-lg mx-auto px-6 pb-6">
+        <div className="flex items-center gap-3 mb-5">
+          <h3 className="font-serif text-xl font-bold text-[#3b1f0a]">The Route</h3>
+          <div className="flex-1 border-t border-dashed border-[#6b3f1e] opacity-30" />
+        </div>
+
+        {/* I-240 north stops */}
+        <p className="font-mono text-[10px] tracking-widest text-[#6b3f1e] opacity-60 uppercase mb-3">
+          North of I-240 · Dense & Busy
+        </p>
+
+        <div className="flex flex-col gap-2 mb-4">
+          {coreStops.filter(s => s.zone === 'north').map(shop => (
+            <Link
+              key={shop.id}
+              href={`/stop/${shop.id}`}
+              className="flex items-center gap-3 p-3 bg-white/50 border border-[#6b3f1e]/20
+                         rounded-sm hover:bg-white/80 transition-all group"
             >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
+              <span
+                className="w-7 h-7 rounded-full flex items-center justify-center
+                           text-white text-xs font-mono font-bold flex-shrink-0"
+                style={{ backgroundColor: shop.selloColor }}
+              >
+                {shop.passportStop}
+              </span>
+              <div className="flex-1 min-w-0">
+                <p className="font-serif font-bold text-[#3b1f0a] text-sm truncate">
+                  {shop.name}
+                </p>
+                <p className="font-mono text-[10px] text-[#6b3f1e] opacity-60">
+                  {shop.address}
+                </p>
+              </div>
+              <span className="text-[#6b3f1e] opacity-30 group-hover:opacity-60 transition-all">
+                →
+              </span>
+            </Link>
+          ))}
+        </div>
+
+        {/* I-240 divider */}
+        <div className="flex items-center gap-3 my-4">
+          <div className="flex-1 h-px bg-[#b84c1a] opacity-40" />
+          <span className="font-mono text-[10px] text-[#b84c1a] tracking-widest px-2">
+            I-240
+          </span>
+          <div className="flex-1 h-px bg-[#b84c1a] opacity-40" />
+        </div>
+
+        {/* South stops */}
+        <p className="font-mono text-[10px] tracking-widest text-[#6b3f1e] opacity-60 uppercase mb-3">
+          South of I-240 · Quieter & Deeper
+        </p>
+
+        <div className="flex flex-col gap-2">
+          {coreStops.filter(s => s.zone === 'south').map(shop => (
+            <Link
+              key={shop.id}
+              href={`/stop/${shop.id}`}
+              className="flex items-center gap-3 p-3 bg-white/50 border border-[#6b3f1e]/20
+                         rounded-sm hover:bg-white/80 transition-all group"
             >
-              Learning
-            </a>{" "}
-            center.
+              <span
+                className="w-7 h-7 rounded-full flex items-center justify-center
+                           text-white text-xs font-mono font-bold flex-shrink-0"
+                style={{ backgroundColor: shop.selloColor }}
+              >
+                {shop.passportStop}
+              </span>
+              <div className="flex-1 min-w-0">
+                <p className="font-serif font-bold text-[#3b1f0a] text-sm truncate">
+                  {shop.name}
+                </p>
+                <p className="font-mono text-[10px] text-[#6b3f1e] opacity-60">
+                  {shop.address}
+                </p>
+              </div>
+              <span className="text-[#6b3f1e] opacity-30 group-hover:opacity-60 transition-all">
+                →
+              </span>
+            </Link>
+          ))}
+        </div>
+      </div>
+
+      {/* HYGGE FIVE */}
+      <div className="max-w-lg mx-auto px-6 pb-10">
+        <div className="mt-6 p-5 bg-[#e8d9b8] border border-[#6b3f1e]/30 rounded-sm">
+          <p className="font-mono text-[10px] tracking-widest text-[#5a7a4a] uppercase mb-1">
+            🕯 Hidden Collection
           </p>
+          <p className="font-serif text-base font-bold text-[#3b1f0a]">
+            The Hygge Five
+          </p>
+          <p className="font-serif italic text-sm text-[#6b3f1e] mt-1 leading-relaxed">
+            Five rooms where time slows down.
+            One of them started in Prague in 1993.
+            Find all five.
+          </p>
+          <div className="flex flex-wrap gap-2 mt-3">
+            {hyggieFive.map(shop => (
+              <span
+                key={shop.id}
+                className="text-xs font-mono px-2 py-1 rounded-sm text-white opacity-80"
+                style={{ backgroundColor: shop.selloColor }}
+              >
+                {shop.name.split(' ')[0]}
+              </span>
+            ))}
+          </div>
         </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
-        </div>
-      </main>
-    </div>
-  );
+      </div>
+
+      {/* FOOTER */}
+      <div className="bg-[#3b1f0a] px-6 py-8 text-center border-t-2 border-[#c8973a]">
+        <p className="font-serif italic text-[#e8d9b8] text-sm opacity-70 leading-relaxed">
+          Made with love by a seven-year West Asheville resident.
+          <br />
+          These aren't just coffee shops — they're the living room of the neighborhood.
+        </p>
+        <p className="font-mono text-[10px] text-[#c8973a] opacity-50 tracking-widest mt-4">
+          #HaywoodHoppers · #WestAVLCoffee · #AVLLocal
+        </p>
+      </div>
+
+    </main>
+  )
 }
