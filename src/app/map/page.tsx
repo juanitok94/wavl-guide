@@ -18,15 +18,15 @@ const minLon = Math.min(...allLons)
 const maxLon = Math.max(...allLons)
 const lonSpan = maxLon - minLon || 1
 
-function lonToPercent(lon: number): number {
-  // Flip: more-negative lon = further west = higher percent (right side)
-  // East is left (start), West is right (end)
-  return ((lon - minLon) / lonSpan) * 100
+function lonToPercent(lon: number, flip: boolean): number {
+  // Default: East (less negative) = left, West (more negative) = right
+  // Flipped: West = left, East = right
+  const pct = ((lon - minLon) / lonSpan) * 100
+  return flip ? 100 - pct : pct
 }
 
 // I-240 approximate longitude (between stop 4 and stop 5)
 const I240_LON = -82.5857
-const I240_PCT = lonToPercent(I240_LON)
 
 // Sort core stops for the route line
 const coreStops = shops
@@ -40,6 +40,7 @@ export default function MapPage() {
   const [mounted, setMounted] = useState(false)
   const [activeLayers, setActiveLayers] = useState<Set<string>>(new Set(['coffee']))
   const [selectedStop, setSelectedStop] = useState<string | null>(null)
+  const [flipped, setFlipped] = useState(false)
 
   useEffect(() => {
     setStamps(getStamps())
@@ -130,13 +131,21 @@ export default function MapPage() {
       <div className="max-w-2xl mx-auto px-4 py-6">
         <div className="relative bg-white/40 border border-[#6b3f1e]/15 rounded-sm p-4 overflow-hidden">
 
-          {/* Direction labels */}
-          <div className="flex justify-between mb-2">
+          {/* Direction labels + flip toggle */}
+          <div className="flex justify-between items-center mb-2">
             <span className="font-mono text-[9px] tracking-widest text-[#6b3f1e] opacity-40 uppercase">
-              ← East
+              {flipped ? '← West' : '← East'}
             </span>
+            <button
+              onClick={() => setFlipped(f => !f)}
+              className="font-mono text-[9px] tracking-widest text-[#6b3f1e] opacity-50
+                         hover:opacity-80 transition-opacity px-2 py-1 border border-[#6b3f1e]/20
+                         rounded-sm bg-white/50 hover:bg-white/80"
+            >
+              ⇄ Flip
+            </button>
             <span className="font-mono text-[9px] tracking-widest text-[#6b3f1e] opacity-40 uppercase">
-              West →
+              {flipped ? 'East →' : 'West →'}
             </span>
           </div>
 
@@ -151,8 +160,8 @@ export default function MapPage() {
 
             {/* I-240 crossing */}
             <div
-              className="absolute top-0 bottom-0 w-px"
-              style={{ left: `${I240_PCT}%` }}
+              className="absolute top-0 bottom-0 w-px transition-all duration-500"
+              style={{ left: `${lonToPercent(I240_LON, flipped)}%` }}
             >
               <div className="absolute inset-0 bg-[#b84c1a] opacity-30" />
               <div className="absolute top-2 left-1/2 -translate-x-1/2 whitespace-nowrap">
@@ -163,24 +172,37 @@ export default function MapPage() {
             </div>
 
             {/* Zone labels */}
-            <div
-              className="absolute font-mono text-[8px] tracking-widest text-[#6b3f1e] opacity-30 uppercase"
-              style={{ top: '8px', left: `${I240_PCT / 2}%`, transform: 'translateX(-50%)' }}
-            >
-              North · Dense
-            </div>
-            <div
-              className="absolute font-mono text-[8px] tracking-widest text-[#6b3f1e] opacity-30 uppercase"
-              style={{ top: '8px', left: `${I240_PCT + (100 - I240_PCT) / 2}%`, transform: 'translateX(-50%)' }}
-            >
-              South · Quiet
-            </div>
+            {(() => {
+              const i240pct = lonToPercent(I240_LON, flipped)
+              const northCenter = flipped
+                ? i240pct + (100 - i240pct) / 2
+                : i240pct / 2
+              const southCenter = flipped
+                ? i240pct / 2
+                : i240pct + (100 - i240pct) / 2
+              return (
+                <>
+                  <div
+                    className="absolute font-mono text-[8px] tracking-widest text-[#6b3f1e] opacity-30 uppercase transition-all duration-500"
+                    style={{ top: '8px', left: `${northCenter}%`, transform: 'translateX(-50%)' }}
+                  >
+                    North · Dense
+                  </div>
+                  <div
+                    className="absolute font-mono text-[8px] tracking-widest text-[#6b3f1e] opacity-30 uppercase transition-all duration-500"
+                    style={{ top: '8px', left: `${southCenter}%`, transform: 'translateX(-50%)' }}
+                  >
+                    South · Quiet
+                  </div>
+                </>
+              )
+            })()}
 
             {/* Non-passport layer dots (background) */}
             {visibleShops
               .filter(s => !s.passportType)
               .map(shop => {
-                const x = lonToPercent(shop.coordinates[0])
+                const x = lonToPercent(shop.coordinates[0], flipped)
                 const layerColor = layers.find(l => l.id === shop.layers[0])?.color || '#999'
                 // Stagger vertically so dots don't pile up
                 const hash = shop.id.charCodeAt(0) + shop.id.charCodeAt(1)
@@ -207,7 +229,7 @@ export default function MapPage() {
 
             {/* Bonus stops (slightly larger, diamond shape via rotation) */}
             {bonusStops.map(shop => {
-              const x = lonToPercent(shop.coordinates[0])
+              const x = lonToPercent(shop.coordinates[0], flipped)
               const stamped = !!stamps[shop.id]
               const hash = shop.id.charCodeAt(2) + shop.id.charCodeAt(3)
               const yOffset = (hash % 5) * 14 - 28
@@ -234,7 +256,7 @@ export default function MapPage() {
 
             {/* Core passport stops (largest, numbered) */}
             {coreStops.map(shop => {
-              const x = lonToPercent(shop.coordinates[0])
+              const x = lonToPercent(shop.coordinates[0], flipped)
               const stamped = !!stamps[shop.id]
               // Alternate above/below road for readability
               const above = shop.passportStop % 2 === 1
