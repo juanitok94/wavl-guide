@@ -95,12 +95,15 @@ export default function MapPage() {
           The Map
         </h1>
         <p className="text-[#e8d9b8] text-sm italic mt-1 opacity-70">
-          Haywood Road, east to west
+          10 stops. One road. Walk it.
         </p>
       </div>
 
       {/* LAYER FILTERS */}
       <div className="max-w-2xl mx-auto px-4 pt-5">
+        <p className="text-center font-mono text-[10px] tracking-widest text-[#6b3f1e] opacity-50 uppercase mb-3">
+          Tap to filter · Coffee always on
+        </p>
         <div className="flex flex-wrap gap-2 justify-center">
           {layers.map(layer => {
             const active = activeLayers.has(layer.id)
@@ -169,6 +172,20 @@ export default function MapPage() {
                   I-240
                 </span>
               </div>
+            </div>
+
+            {/* Secondary street labels */}
+            <div
+              className="absolute font-mono text-[8px] tracking-widest text-[#6b3f1e] opacity-30 uppercase"
+              style={{ top: '24px', left: `${lonToPercent(-82.576, flipped)}%`, transform: 'translateX(-50%)' }}
+            >
+              Riverview Dr
+            </div>
+            <div
+              className="absolute font-mono text-[8px] tracking-widest text-[#6b3f1e] opacity-30 uppercase"
+              style={{ top: '24px', left: `${lonToPercent(-82.598, flipped)}%`, transform: 'translateX(-50%)' }}
+            >
+              Patton Ave
             </div>
 
             {/* Zone labels */}

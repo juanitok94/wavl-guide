@@ -43,7 +43,7 @@ export default function Home() {
         </p>
         <p className="font-serif text-lg leading-relaxed text-[#3b1f0a] mt-4">
           This passport is your guide. Walk east to west.
-          The road gets quieter south of I-240. That's not a warning — it's the point.
+          The road gets quieter past I-240. That's not a warning — it's the point.
         </p>
 
         {/* CTA */}
@@ -77,7 +77,7 @@ export default function Home() {
 
         {/* I-240 north stops */}
         <p className="font-mono text-[10px] tracking-widest text-[#6b3f1e] opacity-60 uppercase mb-3">
-          North of I-240 · Dense & Busy
+          East Haywood
         </p>
 
         <div className="flex flex-col gap-2 mb-4">
@@ -110,18 +110,9 @@ export default function Home() {
           ))}
         </div>
 
-        {/* I-240 divider */}
-        <div className="flex items-center gap-3 my-4">
-          <div className="flex-1 h-px bg-[#b84c1a] opacity-40" />
-          <span className="font-mono text-[10px] text-[#b84c1a] tracking-widest px-2">
-            I-240
-          </span>
-          <div className="flex-1 h-px bg-[#b84c1a] opacity-40" />
-        </div>
-
         {/* South stops */}
         <p className="font-mono text-[10px] tracking-widest text-[#6b3f1e] opacity-60 uppercase mb-3">
-          South of I-240 · Quieter & Deeper
+          West Haywood
         </p>
 
         <div className="flex flex-col gap-2">
