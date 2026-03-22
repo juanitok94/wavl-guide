@@ -37,13 +37,14 @@ export default function Home() {
       {/* INTRO */}
       <div className="max-w-lg mx-auto px-6 py-10">
         <p className="font-serif text-lg leading-relaxed text-[#3b1f0a]">
-          Haywood Road has been the spine of West Asheville for over a century —
-          built along the old Western Turnpike toward Haywood County.
-          Today it's home to ten of the most distinct coffee shops in the mountains.
+          Haywood Road has carried people west for over a century,
+          first as the old turnpike toward Haywood County. Today it
+          holds ten coffee shops that each feel like their own place.
         </p>
         <p className="font-serif text-lg leading-relaxed text-[#3b1f0a] mt-4">
-          This passport is your guide. Walk east to west.
-          The road gets quieter past I-240. That's not a warning — it's the point.
+          This passport is a way to walk it. Start on the east
+          end and keep going. After I-240 it gets quieter. That's
+          where the road opens up.
         </p>
 
         {/* CTA */}
@@ -156,9 +157,8 @@ export default function Home() {
             The Hygge Five
           </p>
           <p className="font-serif italic text-sm text-[#6b3f1e] mt-1 leading-relaxed">
-            Five rooms where time slows down.
-            One of them started in Prague in 1993.
-            Find all five.
+            Five rooms where time slows. One began in Prague
+            in 1993. Find all five.
           </p>
           <div className="flex flex-wrap gap-2 mt-3">
             {hyggieFive.map(shop => (
