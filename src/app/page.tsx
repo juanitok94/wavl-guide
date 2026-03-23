@@ -35,13 +35,13 @@ export default function Home() {
       </div>
 
       {/* INTRO */}
-      <div className="max-w-lg mx-auto px-6 py-10">
-        <p className="font-serif text-lg leading-relaxed text-[#3b1f0a]">
+      <div className="max-w-2xl mx-auto px-6 py-10">
+        <p className="font-serif text-lg leading-relaxed text-[#1a1208]">
           Haywood Road has carried people west for over a century,
           first as the old turnpike toward Haywood County. Today it
           holds ten coffee shops that each feel like their own place.
         </p>
-        <p className="font-serif text-lg leading-relaxed text-[#3b1f0a] mt-4">
+        <p className="font-serif text-lg leading-relaxed text-[#1a1208] mt-4">
           This passport is a way to walk it. Start on the east
           end and keep going. After I-240 it gets quieter. That's
           where the road opens up.
@@ -70,77 +70,83 @@ export default function Home() {
       </div>
 
       {/* THE ROUTE */}
-      <div className="max-w-lg mx-auto px-6 pb-6">
-        <div className="flex items-center gap-3 mb-5">
-          <h3 className="font-serif text-xl font-bold text-[#3b1f0a]">The Route</h3>
+      <div className="max-w-2xl mx-auto px-6 pb-6">
+        <div className="flex items-center gap-3 mb-6">
+          <h3 className="font-serif text-2xl font-bold text-[#3b1f0a]">The Route</h3>
           <div className="flex-1 border-t border-dashed border-[#6b3f1e] opacity-30" />
         </div>
 
-        {/* I-240 north stops */}
-        <p className="font-mono text-[10px] tracking-widest text-[#6b3f1e] opacity-60 uppercase mb-3">
+        {/* East Haywood stops */}
+        <p className="font-mono text-[11px] tracking-widest text-[#6b3f1e] opacity-80 uppercase mb-4 border-l-2 border-[#c8973a]/40 pl-3">
           East Haywood
         </p>
 
-        <div className="flex flex-col gap-2 mb-4">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-3 mb-4">
           {coreStops.filter(s => s.zone === 'north').map(shop => (
             <Link
               key={shop.id}
               href={`/stop/${shop.id}`}
-              className="flex items-center gap-3 p-3 bg-white/50 border border-[#6b3f1e]/20
-                         rounded-sm hover:bg-white/80 transition-all group"
+              className="flex items-center gap-3 p-4 bg-white/70 border border-[#6b3f1e]/20
+                         rounded-sm hover:bg-white/80 hover:-translate-y-0.5
+                         shadow-[0_2px_8px_rgba(59,31,10,0.08)]
+                         hover:shadow-[0_4px_16px_rgba(59,31,10,0.14)]
+                         transition-all duration-200 group"
             >
               <span
-                className="w-7 h-7 rounded-full flex items-center justify-center
+                className="w-9 h-9 rounded-full flex items-center justify-center
                            text-white text-xs font-mono font-bold flex-shrink-0"
                 style={{ backgroundColor: shop.selloColor }}
               >
                 {shop.passportStop}
               </span>
               <div className="flex-1 min-w-0">
-                <p className="font-serif font-bold text-[#3b1f0a] text-sm truncate">
+                <p className="font-serif font-bold text-[#3b1f0a] text-base truncate">
                   {shop.name}
                 </p>
-                <p className="font-mono text-[10px] text-[#6b3f1e] opacity-60">
+                <p className="font-mono text-[11px] text-[#6b3f1e] opacity-80">
                   {shop.address}
                 </p>
               </div>
-              <span className="text-[#6b3f1e] opacity-30 group-hover:opacity-60 transition-all">
-                →
+              <span className="text-[#6b3f1e] text-lg opacity-40 group-hover:opacity-70 transition-all">
+                ›
               </span>
             </Link>
           ))}
         </div>
 
-        {/* South stops */}
-        <p className="font-mono text-[10px] tracking-widest text-[#6b3f1e] opacity-60 uppercase mb-3">
+        {/* West Haywood stops */}
+        <p className="font-mono text-[11px] tracking-widest text-[#6b3f1e] opacity-80 uppercase mb-4 border-l-2 border-[#c8973a]/40 pl-3">
           West Haywood
         </p>
 
-        <div className="flex flex-col gap-2">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
           {coreStops.filter(s => s.zone === 'south').map(shop => (
             <Link
               key={shop.id}
               href={`/stop/${shop.id}`}
-              className="flex items-center gap-3 p-3 bg-white/50 border border-[#6b3f1e]/20
-                         rounded-sm hover:bg-white/80 transition-all group"
+              className="flex items-center gap-3 p-4 bg-white/70 border border-[#6b3f1e]/20
+                         rounded-sm hover:bg-white/80 hover:-translate-y-0.5
+                         shadow-[0_2px_8px_rgba(59,31,10,0.08)]
+                         hover:shadow-[0_4px_16px_rgba(59,31,10,0.14)]
+                         transition-all duration-200 group"
             >
               <span
-                className="w-7 h-7 rounded-full flex items-center justify-center
+                className="w-9 h-9 rounded-full flex items-center justify-center
                            text-white text-xs font-mono font-bold flex-shrink-0"
                 style={{ backgroundColor: shop.selloColor }}
               >
                 {shop.passportStop}
               </span>
               <div className="flex-1 min-w-0">
-                <p className="font-serif font-bold text-[#3b1f0a] text-sm truncate">
+                <p className="font-serif font-bold text-[#3b1f0a] text-base truncate">
                   {shop.name}
                 </p>
-                <p className="font-mono text-[10px] text-[#6b3f1e] opacity-60">
+                <p className="font-mono text-[11px] text-[#6b3f1e] opacity-80">
                   {shop.address}
                 </p>
               </div>
-              <span className="text-[#6b3f1e] opacity-30 group-hover:opacity-60 transition-all">
-                →
+              <span className="text-[#6b3f1e] text-lg opacity-40 group-hover:opacity-70 transition-all">
+                ›
               </span>
             </Link>
           ))}
@@ -148,12 +154,13 @@ export default function Home() {
       </div>
 
       {/* HYGGE FIVE */}
-      <div className="max-w-lg mx-auto px-6 pb-10">
-        <div className="mt-6 p-5 bg-[#e8d9b8] border border-[#6b3f1e]/30 rounded-sm">
+      <div className="max-w-2xl mx-auto px-6 pb-10">
+        <div className="mt-6 p-6 bg-white/60 backdrop-blur-sm border border-[#6b3f1e]/30 rounded-sm
+                        shadow-[0_2px_12px_rgba(59,31,10,0.10)]">
           <p className="font-mono text-[10px] tracking-widest text-[#5a7a4a] uppercase mb-1">
             🕯 Hidden Collection
           </p>
-          <p className="font-serif text-base font-bold text-[#3b1f0a]">
+          <p className="font-serif text-lg font-bold text-[#3b1f0a]">
             The Hygge Five
           </p>
           <p className="font-serif italic text-sm text-[#6b3f1e] mt-1 leading-relaxed">
