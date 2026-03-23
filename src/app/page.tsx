@@ -21,13 +21,13 @@ export default function Home() {
            Haywood Road · West Asheville, NC
         </p>
         <h1 className="font-serif text-5xl font-black text-[#f5edd8] leading-none">
-          Haywood
+          Haywood Road
         </h1>
         <h2 className="font-serif text-4xl italic text-[#c8973a] leading-none mt-1">
-          Hoppers
+          Ledger
         </h2>
         <p className="text-[#e8d9b8] text-sm italic mt-3 opacity-70">
-          A coffee passport for the neighborhood
+          Along Haywood Road
         </p>
         <div className="flex items-center justify-center gap-3 mt-4 text-[#c8973a] opacity-50 text-sm">
           <span>☕</span><span>✦</span><span>☕</span>

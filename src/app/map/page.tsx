@@ -89,7 +89,7 @@ export default function MapPage() {
           className="font-mono text-[10px] tracking-widest text-[#c8973a] opacity-60
                      hover:opacity-100 transition-opacity uppercase"
         >
-          ← Haywood Hoppers
+          ← Haywood Road Ledger
         </Link>
         <h1 className="font-serif text-3xl font-black text-[#f5edd8] mt-2">
           The Map
