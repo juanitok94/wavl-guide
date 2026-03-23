@@ -18,7 +18,7 @@ export default function Home() {
       {/* HEADER */}
       <div className="bg-[#3b1f0a] px-6 py-10 text-center border-b-4 border-[#c8973a]">
         <p className="text-[#c8973a] text-xs tracking-[0.3em] uppercase mb-2 font-mono">
-           Haywood Road · West Asheville, NC
+           West Asheville, NC
         </p>
         <h1 className="font-serif text-5xl font-black text-[#f5edd8] leading-none">
           Haywood Road
