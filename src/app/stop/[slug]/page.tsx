@@ -118,9 +118,9 @@ export default function StopPage({ params }: { params: Promise<{ slug: string }>
           {shop.address}
         </p>
 
-        {shop.story?.headline && (
+        {shop.story?.insiderTip && (
           <p className="font-serif italic text-sm text-white/60 mt-2">
-            {shop.story.headline}
+            {shop.story.insiderTip}
           </p>
         )}
       </div>
