@@ -26,6 +26,7 @@ export default function StopPage({ params }: { params: Promise<{ slug: string }>
   const [showTrivia, setShowTrivia] = useState(false)
   const [showAnswer, setShowAnswer] = useState(false)
   const [mounted, setMounted] = useState(false)
+  const [showFullStory, setShowFullStory] = useState(false)
 
   useEffect(() => {
     const s = getStamps()
@@ -74,12 +75,16 @@ export default function StopPage({ params }: { params: Promise<{ slug: string }>
     fri: 'Fri', sat: 'Sat', sun: 'Sun',
   }
 
+  const storyBody: string = shop.story.body ?? ''
+  const storyPreview = storyBody.slice(0, 120)
+  const storyNeedsExpand = storyBody.length > 120
+
   return (
     <main className="min-h-screen bg-[#f5edd8] text-[#1a1208]">
 
       {/* HEADER — colored by sello */}
       <div
-        className="px-6 py-8 text-center border-b-4"
+        className="px-6 py-14 text-center border-b-4"
         style={{
           backgroundColor: shop.selloColor,
           borderBottomColor: '#c8973a',
@@ -95,16 +100,38 @@ export default function StopPage({ params }: { params: Promise<{ slug: string }>
 
         {isCore && (
           <p className="font-mono text-[10px] tracking-widest text-white/50 uppercase mt-3">
-            Stop {shop.passportStop} of 10 · {shop.zone === 'north' ? 'North' : 'South'} of I-240
+            Stop {shop.passportStop} of 10 · {shop.zone === 'north' ? 'East' : 'West'} Haywood
           </p>
         )}
 
-        <h1 className="font-serif text-3xl font-black text-white mt-2 leading-tight">
+        {isCore && (
+          <p className="font-serif text-6xl font-black text-white/20 leading-none mt-2">
+            {shop.passportStop}
+          </p>
+        )}
+
+        <h1 className="font-serif text-4xl font-black text-white mt-2 leading-tight">
           {shop.name}
         </h1>
 
         <p className="font-mono text-xs text-white/60 mt-2">
           {shop.address}
+        </p>
+
+        {shop.story?.headline && (
+          <p className="font-serif italic text-sm text-white/60 mt-2">
+            {shop.story.headline}
+          </p>
+        )}
+      </div>
+
+      {/* IMAGE ZONE PLACEHOLDER */}
+      <div
+        className="w-full h-48 flex items-center justify-center"
+        style={{ backgroundColor: `${shop.selloColor}20` }}
+      >
+        <p className="font-mono text-[10px] tracking-widest text-[#6b3f1e] opacity-30 uppercase">
+          Photo coming soon
         </p>
       </div>
 
@@ -167,9 +194,26 @@ export default function StopPage({ params }: { params: Promise<{ slug: string }>
           <h2 className="font-serif text-xl font-bold text-[#3b1f0a] leading-snug">
             {shop.story.headline}
           </h2>
-          <p className="font-serif text-base text-[#3b1f0a] mt-3 leading-relaxed">
-            {shop.story.body}
-          </p>
+
+          <div className="relative mt-3">
+            <p className="font-serif text-base text-[#3b1f0a] leading-relaxed transition-all duration-500">
+              {showFullStory || !storyNeedsExpand ? storyBody : `${storyPreview}…`}
+            </p>
+
+            {!showFullStory && storyNeedsExpand && (
+              <div className="absolute bottom-0 left-0 right-0 h-8 bg-gradient-to-t from-[#f5edd8] to-transparent" />
+            )}
+          </div>
+
+          {storyNeedsExpand && (
+            <button
+              onClick={() => setShowFullStory(v => !v)}
+              className="mt-2 font-mono text-xs text-[#6b3f1e] underline underline-offset-4
+                         hover:text-[#3b1f0a] transition-colors"
+            >
+              {showFullStory ? 'Show less' : 'Read more'}
+            </button>
+          )}
         </div>
 
         {/* INSIDER TIP */}
@@ -193,18 +237,29 @@ export default function StopPage({ params }: { params: Promise<{ slug: string }>
             <div className="flex-1 border-t border-dashed border-[#6b3f1e] opacity-20" />
           </div>
 
-          <div className="grid grid-cols-7 gap-1">
+          <div className="flex flex-col gap-1">
             {dayOrder.map(day => {
               const val = shop.hours[day]
               const closed = val?.toLowerCase() === 'closed'
+              const today = new Date().toLocaleDateString(
+                'en-US', { weekday: 'short' }
+              ).toLowerCase().slice(0, 3)
+              const isToday = today === day
               return (
-                <div key={day} className="text-center">
-                  <p className="font-mono text-[9px] text-[#6b3f1e] opacity-50 uppercase">
-                    {dayLabels[day]}
-                  </p>
-                  <p className={`font-mono text-[10px] mt-0.5 ${closed ? 'text-[#b84c1a] opacity-60' : 'text-[#3b1f0a]'}`}>
-                    {closed ? '—' : val}
-                  </p>
+                <div key={day} className={`flex justify-between items-center py-1.5 px-3 rounded-sm
+                  ${isToday ? 'bg-white/70 font-bold' : 'bg-white/30'}
+                `}>
+                  <span className={`font-mono text-xs uppercase
+                    ${isToday ? 'text-[#3b1f0a]' : 'text-[#6b3f1e] opacity-60'}
+                  `}>
+                    {isToday ? '→ ' : ''}{dayLabels[day]}
+                  </span>
+                  <span className={`font-mono text-xs
+                    ${closed ? 'text-[#b84c1a] opacity-60' :
+                      isToday ? 'text-[#3b1f0a]' : 'text-[#3b1f0a] opacity-80'}
+                  `}>
+                    {closed ? 'Closed' : val}
+                  </span>
                 </div>
               )
             })}
@@ -302,6 +357,28 @@ export default function StopPage({ params }: { params: Promise<{ slug: string }>
           )}
         </div>
 
+        {/* SHARE BUTTON */}
+        <button
+          onClick={() => {
+            if (navigator.share) {
+              navigator.share({
+                title: shop.name,
+                text: `I just stamped ${shop.name} on the Haywood Road Ledger.`,
+                url: window.location.href,
+              })
+            } else {
+              navigator.clipboard.writeText(window.location.href)
+              alert('Link copied!')
+            }
+          }}
+          className="mt-4 w-full py-3 border border-[#6b3f1e]/30
+                     rounded-sm font-mono text-xs tracking-widest
+                     uppercase text-[#6b3f1e] hover:bg-white/50
+                     transition-all"
+        >
+          Share This Stop
+        </button>
+
         {/* PREV / NEXT NAV */}
         {isCore && (
           <div className="mt-10">
@@ -378,7 +455,7 @@ export default function StopPage({ params }: { params: Promise<{ slug: string }>
         </Link>
       </div>
 
-      {/* Inline animation keyframes */}{/* Inline animation keyframes */}
+      {/* Inline animation keyframes */}
       <style dangerouslySetInnerHTML={{ __html: `
         @keyframes stampIn {
           0% { transform: scale(0.5) rotate(-10deg); opacity: 0; }
