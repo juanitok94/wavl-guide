@@ -1,6 +1,6 @@
 # Haywood Hoppers — Claude Code Project Brief
 > John Kean · Peachy Kean DevOps LLC · Asheville, NC
-> Last updated: March 23, 2026
+> Last updated: March 27, 2026
 
 ## What This Is
 Haywood Hoppers is a mobile-first digital coffee passport
@@ -53,21 +53,25 @@ localStorage only.
 ## The 10 Core Stops (east to west)
 | # | Shop | Street Side |
 |---|------|-------------|
-| 1 | Cooperative Coffee Roasters | South |
-| 2 | BattleCat Coffee Bar | North |
-| 3 | Flora | South |
-| 4 | Haywood Famous | South |
-| 5 | Bad Manners Coffee | North |
-| 6 | Dobra Tea West | North |
-| 7 | Rowan Coffee | North |
-| 8 | Odd's Cafe | South |
-| 9 | Plant Bar | South |
-| 10 | Izzy's Coffee House | South |
+| 1 | Cooperative Coffee Roasters | North |
+| 2 | BattleCat Coffee Bar | South |
+| 3 | Flora & Forage | North |
+| 4 | Haywood Famous | North |
+| 5 | Bad Manners Coffee | South |
+| 6 | Rowan Coffee | South |
+| 7 | Odd's Cafe | North |
+| 8 | Plant Bar | South |
+| 9 | Izzy's Coffee House | North |
+| 10 | West End Bakery | South |
 
 ## Bonus/Directory Stops
 - Firestorm Books & Coffee (Hygge Five anchor, Prague 1993)
 - Asheville Kava X Coffee (demoted — gas station adjacent)
 - Deep Time Coffee (demoted — open only 4 days/week)
+
+## Honorable Mentions
+- Dobra Tea West (strong candidate — tea-forward, excellent vibe)
+- Potential New Boyfriend
 
 ## Core Stop Eligibility Rule
 A shop must be open minimum 5 days per week to qualify
@@ -106,19 +110,20 @@ src/
    fix: for corrections
    refactor: for restructuring
 
-## Current Build Status (March 23, 2026)
+## Current Build Status (March 27, 2026)
 - ✅ Homepage
 - ✅ Passport page
 - ✅ Stop pages (individual)
 - ✅ Map page with flip toggle
 - ✅ Mobile-first card upgrade
 - ✅ Copy wordsmith pass (ChatGPT)
+- ✅ streetSide field added to all shops
+- ✅ Share button on stop pages
+- ✅ Progressive disclosure on stop pages
+- ✅ Shop photo zone with FPO fallback
+- ✅ Stop page I-240 zone label fix
 - ⬜ shops.json restructure (Flora, Dobra as core)
-- ⬜ streetSide field added to all shops
-- ⬜ Stop page I-240 zone label fix
 - ⬜ BottomNav
-- ⬜ Progressive disclosure on stop pages
-- ⬜ Share button on stop pages
 - ⬜ ChatGPT content for Flora, Dobra, Bad Manners
 - ⬜ Dark mode (post user testing)
 - ⬜ Shop photos (after photo walk)
