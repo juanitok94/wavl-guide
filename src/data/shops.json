@@ -638,8 +638,8 @@
       "sun": "9AM\u20134PM",
       "note": "Forage caf\u00e9 is inside and behind Flora floral shop"
     },
-    "passportStop": null,
-    "passportType": "bonus",
+    "passportStop": 3,
+    "passportType": "core",
     "passportBonusNumber": 2,
     "selloColor": "#2a6b2a",
     "selloPersonality": "botanical leaf pressed in ink, organic edges",
@@ -865,8 +865,8 @@
       "sun": "open 24 hours",
       "note": "Only 24-hour coffee stop on Haywood Road"
     },
-    "passportStop": 3,
-    "passportType": "core",
+    "passportStop": null,
+    "passportType": "bonus",
     "selloColor": "#4a1a6b",
     "selloPersonality": "botanical mandala, slightly psychedelic, organic edges",
     "hygge": false,
@@ -1354,8 +1354,8 @@
       "sun": "8AM\u20132PM",
       "note": "Tue/Wed/Thu/Sun only. Worth planning around."
     },
-    "passportStop": 5,
-    "passportType": "core",
+    "passportStop": null,
+    "passportType": "bonus",
     "selloColor": "#5c3a1a",
     "selloPersonality": "geological layer cross-section, deep and unhurried",
     "hygge": false,
@@ -1679,7 +1679,7 @@
       "sun": "9AM\u20133PM",
       "note": "Weekend hours slightly later \u2014 plan accordingly"
     },
-    "passportStop": 6,
+    "passportStop": 5,
     "passportType": "core",
     "selloColor": "#1a5c5c",
     "selloPersonality": "safety pin through ink circle, punk warmth",
@@ -1973,12 +1973,15 @@
       "sun": "8:30AM\u20134PM",
       "note": "Wed\u2013Sun only. TooGoodToGo app for end-of-day deals."
     },
-    "passportStop": null,
-    "passportType": null,
+    "passportStop": 10,
+    "passportType": "core",
     "selloColor": "#c8973a",
-    "selloPersonality": null,
+    "selloPersonality": "breakfast biscuit pressed in ink, warm and unpretentious",
     "hygge": false,
-    "stamp": null,
+    "stamp": {
+      "welcomeLine": "You found West End Bakery ☕",
+      "subLine": "The most affordable good meal on Haywood Road. Free parking outside — unheard of."
+    },
     "story": {
       "headline": "The breakfast biscuit anchor of the south end.",
       "body": "West End Bakery has been feeding West Asheville for years. The lavender iced oat milk latte is the signature drink. The breakfast biscuit is the most affordable good meal on Haywood Road. They use TooGoodToGo to reduce food waste at end of day.",
@@ -2134,7 +2137,7 @@
       "sun": "7:30AM\u20138PM",
       "note": "Late nights Thu\u2013Sun. Oysters on Fridays."
     },
-    "passportStop": 7,
+    "passportStop": 6,
     "passportType": "core",
     "selloColor": "#4a5c1a",
     "selloPersonality": "wine glass and coffee cup intertwined, elegant",
@@ -2254,7 +2257,7 @@
       "sun": "7AM\u20137PM",
       "note": "Most reliable hours on the strip \u2014 daily 7 to 7"
     },
-    "passportStop": 8,
+    "passportStop": 7,
     "passportType": "core",
     "selloColor": "#2a3a4a",
     "selloPersonality": "aztec spiral swirl, like the mocha that made it famous",
@@ -2321,7 +2324,7 @@
       "sun": "8AM\u201310PM",
       "note": "Latest hours of any coffee stop on the strip. Inside Asheville Dispensary."
     },
-    "passportStop": 9,
+    "passportStop": 8,
     "passportType": "core",
     "selloColor": "#5c1a2a",
     "selloPersonality": "botanical leaf, slightly mystical, wellness energy",
@@ -2433,7 +2436,7 @@
       "sun": "7:30AM\u20136PM",
       "note": "The westernmost stop. End of the road."
     },
-    "passportStop": 10,
+    "passportStop": 9,
     "passportType": "core",
     "selloColor": "#3b1f0a",
     "selloPersonality": "tiny yellow house outline, hand-drawn, end of the road energy",
