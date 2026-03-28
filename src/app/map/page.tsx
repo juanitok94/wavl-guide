@@ -77,6 +77,10 @@ export default function MapPage() {
 
   const selectedShop = selectedStop ? shops.find(s => s.id === selectedStop) : null
 
+  const todayKey = ['sun','mon','tue','wed','thu','fri','sat'][new Date().getDay()]
+  const todayHours = selectedShop?.hours?.[todayKey]
+  const isClosed = todayHours?.toLowerCase() === 'closed'
+
   const coreStamped = coreStops.filter(s => stamps[s.id]).length
 
   return (
@@ -351,9 +355,22 @@ export default function MapPage() {
       {selectedShop && (
         <div className="max-w-2xl mx-auto px-4 pb-4">
           <div
-            className="p-4 rounded-sm border-l-4 bg-white/60 transition-all"
-            style={{ borderLeftColor: selectedShop.selloColor }}
+            className="relative p-4 rounded-sm border-l-4 bg-white/60 transition-all animate-slide-up"
+            style={{
+              borderLeftColor: selectedShop.selloColor,
+              borderTopColor: selectedShop.selloColor,
+              borderTopWidth: '4px',
+              borderTopStyle: 'solid',
+            }}
           >
+            <button
+              onClick={() => setSelectedStop(null)}
+              className="absolute top-3 right-3 w-6 h-6 rounded-full bg-[#6b3f1e]/10
+                         flex items-center justify-center text-[#6b3f1e] text-xs
+                         hover:bg-[#6b3f1e]/20 transition-colors"
+            >
+              ×
+            </button>
             <div className="flex items-start justify-between gap-3">
               <div className="flex-1 min-w-0">
                 <div className="flex items-center gap-2">
@@ -372,6 +389,27 @@ export default function MapPage() {
                 <p className="font-mono text-[10px] text-[#6b3f1e] opacity-60 mt-0.5">
                   {selectedShop.address}
                 </p>
+
+                {todayHours !== undefined && (
+                  <p className="font-mono text-xs mt-1">
+                    <span className="text-[#c8973a]">→ Today: </span>
+                    <span className={isClosed ? 'text-[#b84c1a]' : 'text-[#1a1208]'}>
+                      {todayHours || 'Hours not listed'}
+                    </span>
+                  </p>
+                )}
+
+                {selectedShop.instagram && (
+                  <a
+                    href={`https://instagram.com/${selectedShop.instagram}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="font-mono text-[10px] text-[#6b3f1e] underline underline-offset-2
+                               mt-1 inline-block hover:text-[#3b1f0a] transition-colors"
+                  >
+                    @{selectedShop.instagram} ↗
+                  </a>
+                )}
 
                 {selectedShop.story?.headline && (
                   <p className="font-serif text-sm text-[#3b1f0a] mt-2 leading-relaxed line-clamp-2">
@@ -515,6 +553,17 @@ export default function MapPage() {
           ← Back Home
         </Link>
       </div>
+
+      <style dangerouslySetInnerHTML={{ __html: `
+        @keyframes slideUp {
+          0% { transform: translateY(20px); opacity: 0; }
+          60% { transform: translateY(-4px); opacity: 1; }
+          100% { transform: translateY(0); opacity: 1; }
+        }
+        .animate-slide-up {
+          animation: slideUp 0.35s ease-out;
+        }
+      `}} />
 
     </main>
   )
