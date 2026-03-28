@@ -77,10 +77,6 @@ export default function MapPage() {
 
   const selectedShop = selectedStop ? shops.find(s => s.id === selectedStop) : null
 
-  const todayKey = ['sun','mon','tue','wed','thu','fri','sat'][new Date().getDay()]
-  const todayHours = selectedShop?.hours?.[todayKey]
-  const isClosed = todayHours?.toLowerCase() === 'closed'
-
   const coreStamped = coreStops.filter(s => stamps[s.id]).length
 
   return (
@@ -207,13 +203,13 @@ export default function MapPage() {
                     className="absolute font-mono text-[8px] tracking-widest text-[#6b3f1e] opacity-30 uppercase transition-all duration-500"
                     style={{ top: '8px', left: `${northCenter}%`, transform: 'translateX(-50%)' }}
                   >
-                    North · Dense
+                    West Haywood
                   </div>
                   <div
                     className="absolute font-mono text-[8px] tracking-widest text-[#6b3f1e] opacity-30 uppercase transition-all duration-500"
                     style={{ top: '8px', left: `${southCenter}%`, transform: 'translateX(-50%)' }}
                   >
-                    South · Quiet
+                    East Haywood
                   </div>
                 </>
               )
@@ -277,7 +273,7 @@ export default function MapPage() {
 
             {/* Core passport stops (largest, numbered) */}
             {coreStops.map(shop => {
-              const x = lonToPercent(shop.coordinates[0], flipped)
+              const x = lonToPercent(shop.coordinates[0], flipped) + (shop.passportStop === 10 ? 1.5 : 0)
               const stamped = !!stamps[shop.id]
               // Alternate above/below road for readability
               const above = shop.passportStop % 2 === 1
@@ -321,10 +317,10 @@ export default function MapPage() {
 
                   {/* Name label */}
                   <p className={`
-                    font-mono text-[8px] leading-tight text-center max-w-[60px] mt-0.5
+                    text-center font-mono text-[9px] text-[#1a1208] mt-1 leading-tight w-16 break-words
                     ${stamped ? 'text-[#3b1f0a]' : 'text-[#6b3f1e] opacity-60'}
                   `}>
-                    {shop.name.split(' ').slice(0, 2).join(' ')}
+                    {shop.name}
                   </p>
                 </button>
               )
@@ -351,124 +347,125 @@ export default function MapPage() {
         </div>
       </div>
 
-      {/* SELECTED STOP DETAIL CARD */}
-      {selectedShop && (
-        <div className="max-w-2xl mx-auto px-4 pb-4">
+      {/* BACKDROP */}
+      {selectedStop && selectedShop && (
+        <div
+          className="fixed inset-0 z-40 bg-black/20"
+          onClick={() => setSelectedStop(null)}
+        />
+      )}
+
+      {/* BOTTOM SHEET */}
+      {selectedStop && selectedShop && (
+        <div
+          className="fixed bottom-0 left-0 right-0 z-50 animate-slide-up"
+          onClick={(e) => e.stopPropagation()}
+        >
           <div
-            className="relative p-4 rounded-sm border-l-4 bg-white/60 transition-all animate-slide-up"
+            className="bg-[#f5edd8] rounded-t-2xl shadow-[0_-4px_24px_rgba(59,31,10,0.15)] max-w-2xl mx-auto"
             style={{
-              borderLeftColor: selectedShop.selloColor,
               borderTopColor: selectedShop.selloColor,
               borderTopWidth: '4px',
               borderTopStyle: 'solid',
             }}
           >
-            <button
-              onClick={() => setSelectedStop(null)}
-              className="absolute top-3 right-3 w-6 h-6 rounded-full bg-[#6b3f1e]/10
-                         flex items-center justify-center text-[#6b3f1e] text-xs
-                         hover:bg-[#6b3f1e]/20 transition-colors"
-            >
-              ×
-            </button>
-            <div className="flex items-start justify-between gap-3">
-              <div className="flex-1 min-w-0">
-                <div className="flex items-center gap-2">
-                  {selectedShop.passportType === 'core' && (
-                    <span
-                      className="w-5 h-5 rounded-full flex items-center justify-center text-white text-[9px] font-mono font-bold flex-shrink-0"
-                      style={{ backgroundColor: selectedShop.selloColor }}
-                    >
-                      {selectedShop.passportStop}
-                    </span>
-                  )}
-                  <h3 className="font-serif text-lg font-bold text-[#3b1f0a] truncate">
-                    {selectedShop.name}
-                  </h3>
-                </div>
-                <p className="font-mono text-[10px] text-[#6b3f1e] opacity-60 mt-0.5">
-                  {selectedShop.address}
-                </p>
+            {/* Handle bar */}
+            <div className="flex justify-center pt-3 pb-1">
+              <div className="w-10 h-1 rounded-full bg-[#6b3f1e]/20" />
+            </div>
 
-                {todayHours !== undefined && (
-                  <p className="font-mono text-xs mt-1">
-                    <span className="text-[#c8973a]">→ Today: </span>
+            <div className="px-6 pb-8 pt-2">
+              {/* Header row */}
+              <div className="flex items-start justify-between gap-4">
+                <div className="flex-1">
+                  <p className="font-mono text-[10px] tracking-widest text-[#6b3f1e] opacity-50 uppercase mb-1">
+                    {selectedShop.layers?.[0]}
+                  </p>
+                  <h2 className="font-serif text-2xl font-bold text-[#1a1208] leading-tight">
+                    {selectedShop.name}
+                  </h2>
+                  <p className="font-mono text-xs text-[#6b3f1e] opacity-60 mt-1">
+                    {selectedShop.address}
+                  </p>
+                </div>
+                <button
+                  onClick={() => setSelectedStop(null)}
+                  className="w-8 h-8 rounded-full bg-[#6b3f1e]/10 flex items-center
+                             justify-center font-mono text-sm text-[#6b3f1e]
+                             hover:bg-[#6b3f1e]/20 transition-colors flex-shrink-0 mt-1"
+                >
+                  ×
+                </button>
+              </div>
+
+              {/* Today's hours */}
+              {(() => {
+                const todayKey = ['sun','mon','tue','wed','thu','fri','sat'][new Date().getDay()]
+                const todayHours = selectedShop.hours?.[todayKey]
+                const isClosed = todayHours?.toLowerCase() === 'closed'
+                return todayHours ? (
+                  <p className="font-mono text-sm mt-3">
+                    <span className="text-[#c8973a] font-bold">→ Today: </span>
                     <span className={isClosed ? 'text-[#b84c1a]' : 'text-[#1a1208]'}>
-                      {todayHours || 'Hours not listed'}
+                      {todayHours}
                     </span>
                   </p>
-                )}
+                ) : null
+              })()}
 
+              {/* Layer pills */}
+              <div className="flex flex-wrap gap-2 mt-3">
+                {selectedShop.layers?.map((layerId: string) => {
+                  const layer = layers.find(l => l.id === layerId)
+                  return layer ? (
+                    <span
+                      key={layerId}
+                      className="text-[10px] font-mono px-2 py-1 rounded-full text-white"
+                      style={{ backgroundColor: layer.color }}
+                    >
+                      {layer.icon} {layer.label}
+                    </span>
+                  ) : null
+                })}
+              </div>
+
+              {/* Action buttons */}
+              <div className="flex gap-3 mt-4">
+                {selectedShop.passportType === 'core' && (
+                  <Link
+                    href={`/stop/${selectedShop.id}`}
+                    className="flex-1 py-3 bg-[#6b3f1e] text-[#f5edd8] text-center
+                               font-mono text-xs tracking-widest uppercase rounded-sm
+                               hover:bg-[#3b1f0a] transition-colors"
+                  >
+                    Visit Stop →
+                  </Link>
+                )}
                 {selectedShop.instagram && (
                   <a
                     href={`https://instagram.com/${selectedShop.instagram}`}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className="font-mono text-[10px] text-[#6b3f1e] underline underline-offset-2
-                               mt-1 inline-block hover:text-[#3b1f0a] transition-colors"
+                    className="flex-1 py-3 border border-[#6b3f1e]/30 text-[#6b3f1e]
+                               text-center font-mono text-xs tracking-widest uppercase
+                               rounded-sm hover:bg-[#6b3f1e]/10 transition-colors"
                   >
-                    @{selectedShop.instagram} ↗
+                    Instagram ↗
                   </a>
                 )}
-
-                {selectedShop.story?.headline && (
-                  <p className="font-serif text-sm text-[#3b1f0a] mt-2 leading-relaxed line-clamp-2">
-                    {selectedShop.story.headline}
-                  </p>
-                )}
-
-                {/* Layer pills */}
-                <div className="flex flex-wrap gap-1 mt-2">
-                  {selectedShop.layers.map((layerId: string) => {
-                    const layer = layers.find(l => l.id === layerId)
-                    return layer ? (
-                      <span
-                        key={layerId}
-                        className="text-[9px] font-mono px-1.5 py-0.5 rounded-sm text-white"
-                        style={{ backgroundColor: layer.color }}
-                      >
-                        {layer.icon} {layer.label}
-                      </span>
-                    ) : null
-                  })}
-                </div>
-
-                {/* Stamp status */}
-                {selectedShop.passportType && (
-                  <p className="font-mono text-[10px] mt-2">
-                    {stamps[selectedShop.id] ? (
-                      <span className="text-[#1a5c2a]">
-                        ✓ Stamped {new Date(stamps[selectedShop.id]).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}
-                      </span>
-                    ) : (
-                      <span className="text-[#6b3f1e] opacity-50">Not yet stamped</span>
-                    )}
-                  </p>
+                {selectedShop.placeId && (
+                  <a
+                    href={`https://www.google.com/maps/place/?q=place_id:${selectedShop.placeId}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex-1 py-3 border border-[#6b3f1e]/30 text-[#6b3f1e]
+                               text-center font-mono text-xs tracking-widest uppercase
+                               rounded-sm hover:bg-[#6b3f1e]/10 transition-colors"
+                  >
+                    Directions ↗
+                  </a>
                 )}
               </div>
-
-              {/* Action link */}
-              {selectedShop.passportType ? (
-                <Link
-                  href={`/stop/${selectedShop.id}`}
-                  className="flex-shrink-0 px-3 py-2 bg-[#6b3f1e] text-[#f5edd8]
-                             font-mono text-[10px] tracking-widest uppercase rounded-sm
-                             hover:bg-[#3b1f0a] transition-colors"
-                >
-                  Visit →
-                </Link>
-              ) : (
-                <a
-                  href={`https://www.google.com/maps/place/?q=place_id:${selectedShop.placeId}`}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="flex-shrink-0 px-3 py-2 border border-[#6b3f1e]/30 text-[#6b3f1e]
-                             font-mono text-[10px] tracking-widest uppercase rounded-sm
-                             hover:bg-[#6b3f1e] hover:text-[#f5edd8] transition-colors"
-                >
-                  Map ↗
-                </a>
-              )}
             </div>
           </div>
         </div>
