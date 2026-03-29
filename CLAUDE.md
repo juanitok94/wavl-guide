@@ -110,7 +110,7 @@ src/
    fix: for corrections
    refactor: for restructuring
 
-## Current Build Status (March 27, 2026)
+## Current Build Status (March 28, 2026)
 - ✅ Homepage
 - ✅ Passport page
 - ✅ Stop pages (individual)
@@ -122,9 +122,48 @@ src/
 - ✅ Progressive disclosure on stop pages
 - ✅ Shop photo zone with FPO fallback
 - ✅ Stop page I-240 zone label fix
+- ✅ Map bottom sheet popup with spring animation
+- ✅ Photo naming convention established
+- ✅ First shop owner contact (Eva, Haywood Famous)
+- ✅ Travel writer outreach (Kayleigh Ruller, Eater/Condé Nast)
+- ✅ Billy Cooley connection (Downtown Asheville Association)
 - ⬜ shops.json restructure (Flora, Dobra as core)
 - ⬜ BottomNav
 - ⬜ ChatGPT content for Flora, Dobra, Bad Manners
 - ⬜ Dark mode (post user testing)
 - ⬜ Shop photos (after photo walk)
 - ⬜ Progress visualization on passport page
+
+## Photo Library
+Photos location: public/images/shops/
+Naming convention: {shop-id}-exterior.jpg,
+{shop-id}-interior.jpg, {shop-id}-interior-2.jpg
+
+### Current Inventory
+- flora-forage-exterior.jpg ✅
+- flora-forage-interior.jpg ✅
+- flora-forage-interior-2.jpg ✅
+- flora-forage-interior-3.jpg ✅
+- haywood-famous-exterior.jpg ✅
+- haywood-famous-interior.jpg ✅
+- owl-bakery-exterior.jpg ✅
+- owl-bakery-interior.jpg (FPO) ✅
+- cooperative-coffee-roasters-exterior.jpg ✅
+- cooperative-coffee-roasters-interior.jpg (FPO) ✅
+
+### Still Needed
+- battlecat-coffee-bar-exterior.jpg
+- battlecat-coffee-bar-interior.jpg
+- bad-manners-coffee-exterior.jpg
+- bad-manners-coffee-interior.jpg
+- rowan-coffee-exterior.jpg
+- rowan-coffee-interior.jpg
+- odds-cafe-exterior.jpg
+- odds-cafe-interior.jpg
+- plant-bar-exterior.jpg
+- plant-bar-interior.jpg
+- izzys-coffee-house-exterior.jpg
+- izzys-coffee-house-interior.jpg
+- west-end-bakery-exterior.jpg
+- west-end-bakery-interior.jpg
+- haywood-famous-interior.jpg
