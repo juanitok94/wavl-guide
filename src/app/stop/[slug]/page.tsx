@@ -5,7 +5,10 @@ import { useState, useEffect, use } from 'react'
 import Link from 'next/link'
 import shopsData from '@/data/shops.json'
 import triviaData from '@/data/trivia.json'
-import { getStamps, addStamp, isStamped as checkStamped, type StampRecord } from '@/lib/stamps'
+import { getStamps, addStamp, type StampRecord } from '@/lib/stamps'
+import { usePhone } from '@/lib/usePhone'
+import { checkin, getProgress } from '@/lib/passportApi'
+import PhoneModal from '@/components/PhoneModal'
 
 const shops = shopsData as any[]
 const trivia = triviaData as any[]
@@ -20,20 +23,37 @@ export default function StopPage({ params }: { params: Promise<{ slug: string }>
   const shop = shops.find(s => s.id === slug)
   const shopTrivia = trivia.find(t => t.shopId === slug)
 
+  const { phone, savePhone, loaded: phoneLoaded } = usePhone()
+
   const [stamps, setStamps] = useState<StampRecord>({})
   const [stamped, setStamped] = useState(false)
   const [justStamped, setJustStamped] = useState(false)
+  const [apiNotInPassport, setApiNotInPassport] = useState(false)
   const [showTrivia, setShowTrivia] = useState(false)
   const [showAnswer, setShowAnswer] = useState(false)
   const [mounted, setMounted] = useState(false)
   const [showFullStory, setShowFullStory] = useState(false)
 
   useEffect(() => {
-    const s = getStamps()
-    setStamps(s)
-    setStamped(!!s[slug])
-    setMounted(true)
-  }, [slug])
+    if (!phoneLoaded) return
+    const localStamps = getStamps()
+
+    if (phone) {
+      getProgress(phone).then(slugs => {
+        const merged: StampRecord = { ...localStamps }
+        for (const s of slugs) {
+          if (!merged[s]) merged[s] = new Date().toISOString()
+        }
+        setStamps(merged)
+        setStamped(slugs.includes(slug) || !!localStamps[slug])
+        setMounted(true)
+      })
+    } else {
+      setStamps(localStamps)
+      setStamped(!!localStamps[slug])
+      setMounted(true)
+    }
+  }, [slug, phone, phoneLoaded])
 
   if (!shop) {
     return (
@@ -60,12 +80,18 @@ export default function StopPage({ params }: { params: Promise<{ slug: string }>
   // Is this the I-240 crossing? (going from stop 4 → 5)
   const crossingI240 = prevStop?.zone === 'north' && shop.zone === 'south'
 
-  function handleStamp() {
-    if (stamped) return
+  async function handleStamp() {
+    if (stamped || !phone) return
+
     const updated = addStamp(slug)
     setStamps(updated)
     setStamped(true)
     setJustStamped(true)
+
+    const result = await checkin(phone, slug)
+    if (!result.ok && 'notInPassport' in result && result.notInPassport) {
+      setApiNotInPassport(true)
+    }
   }
 
   // Hours formatting
@@ -81,6 +107,11 @@ export default function StopPage({ params }: { params: Promise<{ slug: string }>
 
   return (
     <main className="min-h-screen bg-[#f5edd8] text-[#1a1208]">
+
+      {/* Phone capture modal — shown once if no cookie */}
+      {phoneLoaded && !phone && (
+        <PhoneModal onSave={savePhone} />
+      )}
 
       {/* HEADER — colored by sello */}
       <div
@@ -200,6 +231,13 @@ export default function StopPage({ params }: { params: Promise<{ slug: string }>
               </p>
             )}
           </div>
+        )}
+
+        {/* API 404 notice */}
+        {apiNotInPassport && (
+          <p className="font-mono text-[10px] text-[#b84c1a] text-center mt-3 tracking-wide">
+            This stop isn&apos;t in the passport yet.
+          </p>
         )}
 
         {/* STORY */}

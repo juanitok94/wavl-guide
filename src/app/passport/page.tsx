@@ -1,11 +1,13 @@
 // /src/app/passport/page.tsx
 'use client'
 
-import { useState, useEffect, useCallback } from 'react'
+import { useState, useEffect } from 'react'
 import Link from 'next/link'
 import shopsData from '@/data/shops.json'
 import badgesData from '@/data/badges.json'
 import { getStamps, type StampRecord } from '@/lib/stamps'
+import { usePhone } from '@/lib/usePhone'
+import { getProgress } from '@/lib/passportApi'
 
 const shops = shopsData as any[]
 const badges = badgesData as any[]
@@ -18,20 +20,49 @@ const northStops = coreStops.filter(s => s.zone === 'north')
 const southStops = coreStops.filter(s => s.zone === 'south')
 
 export default function PassportPage() {
+  const { phone, loaded: phoneLoaded } = usePhone()
   const [stamps, setStamps] = useState<StampRecord>({})
   const [mounted, setMounted] = useState(false)
 
   useEffect(() => {
-    setStamps(getStamps())
-    setMounted(true)
-  }, [])
+    if (!phoneLoaded) return
+    const localStamps = getStamps()
 
-  // Re-sync when tab regains focus (user may have stamped on another tab)
+    if (phone) {
+      getProgress(phone).then(slugs => {
+        const merged: StampRecord = { ...localStamps }
+        for (const s of slugs) {
+          if (!merged[s]) merged[s] = new Date().toISOString()
+        }
+        setStamps(merged)
+        setMounted(true)
+      })
+    } else {
+      setStamps(localStamps)
+      setMounted(true)
+    }
+  }, [phone, phoneLoaded])
+
+  // Re-sync when tab regains focus
   useEffect(() => {
-    const sync = () => setStamps(getStamps())
+    if (!phoneLoaded) return
+    const sync = () => {
+      const localStamps = getStamps()
+      if (phone) {
+        getProgress(phone).then(slugs => {
+          const merged: StampRecord = { ...localStamps }
+          for (const s of slugs) {
+            if (!merged[s]) merged[s] = new Date().toISOString()
+          }
+          setStamps(merged)
+        })
+      } else {
+        setStamps(localStamps)
+      }
+    }
     window.addEventListener('focus', sync)
     return () => window.removeEventListener('focus', sync)
-  }, [])
+  }, [phone, phoneLoaded])
 
   const coreStamped = coreStops.filter(s => stamps[s.id]).length
   const progress = Math.round((coreStamped / 10) * 100)
@@ -112,7 +143,7 @@ export default function PassportPage() {
       {nextBadge && (
         <div className="max-w-lg mx-auto px-6 pt-3">
           <p className="font-serif text-sm italic text-[#6b3f1e] opacity-70">
-            {nextBadge.threshold - coreStamped} more stamp{nextBadge.threshold - coreStamped !== 1 ? 's' : ''} to earn "{nextBadge.label}"
+            {nextBadge.threshold - coreStamped} more stamp{nextBadge.threshold - coreStamped !== 1 ? 's' : ''} to earn &ldquo;{nextBadge.label}&rdquo;
           </p>
         </div>
       )}

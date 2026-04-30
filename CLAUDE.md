@@ -1,3 +1,7 @@
+# CLAUDE.md
+
+This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
+
 # Haywood Hoppers — Claude Code Project Brief
 > John Kean · Peachy Kean DevOps LLC · Asheville, NC
 > Last updated: March 27, 2026
@@ -8,6 +12,17 @@ for Haywood Road, West Asheville, NC. 10 core stops,
 east to west. Users walk the road, stamp each stop,
 discover hidden collections. No auth, no login,
 localStorage only.
+
+## Commands
+
+```bash
+npm run dev        # Start local dev server at localhost:3000
+npm run build      # Production build
+npm run lint       # ESLint (Next.js config)
+npx tsc --noEmit   # Type-check without emitting (required before finishing any task)
+```
+
+No test suite exists. Manual review at localhost:3000 is the test process.
 
 ## Live URLs
 - Production: wavl-guide.vercel.app
@@ -97,6 +112,41 @@ src/
   lib/
     stamps.ts         — localStorage stamp logic
 
+## shops.json Data Shape
+
+Key fields on each shop object:
+
+| Field | Type | Notes |
+|-------|------|-------|
+| `id` | string | kebab-case slug, used in URL and image paths |
+| `passportType` | `"core"` \| `"bonus"` \| absent | core = numbered passport stop |
+| `passportStop` | number | 1–10, east-to-west order |
+| `zone` | `"north"` \| `"south"` | **GOTCHA: "north" = East Haywood (before I-240); "south" = West Haywood (past I-240)**. The passport page labels these "North of I-240" / "South of I-240" — confusing but intentional geographic labeling |
+| `coordinates` | `[lon, lat]` | longitude first (not lat/lon) |
+| `selloColor` | hex | per-shop accent color for stamp circles and headers |
+| `layers` | string[] | e.g. `["coffee"]` — used for map filter visibility |
+| `hygge` | boolean | Hygge Five membership — do not modify without confirmation |
+| `hours` | `{ mon–sun: string, note?: string }` | `"Closed"` for closed days |
+| `stamp` | `{ welcomeLine, subLine }` | Shown after stamping on stop page |
+| `story` | `{ headline, body, insiderTip?, parkingNote? }` | Editorial content |
+
+### Image paths on stop pages
+
+`/stop/[slug]/page.tsx` loads images as `/images/shops/{shop.id}.jpg` (no suffix).
+The naming convention (`{id}-exterior.jpg`) is for the photo library — when adding
+real photos, you need **both** a bare `{id}.jpg` (for the stop page hero) and
+the named variants. The bare `{id}.jpg` is the primary image.
+
+### Client vs. Server components
+
+- `app/page.tsx` — server component (no `'use client'`, no localStorage)
+- `app/map/page.tsx` — `'use client'` (uses stamps, useState)
+- `app/passport/page.tsx` — `'use client'` (uses stamps, useState)
+- `app/stop/[slug]/page.tsx` — `'use client'` (uses stamps, useState)
+
+All stamp reads must be guarded: `lib/stamps.ts` returns `{}` during SSR.
+Never call stamp functions outside `useEffect` or client components.
+
 ## Standing Rules for Claude Code
 1. Always check TypeScript compiles before finishing
    (npx tsc --noEmit)
@@ -109,6 +159,12 @@ src/
    feat: for new features
    fix: for corrections
    refactor: for restructuring
+7. Data mapping — when mapping values to shops or stops,
+   always verify against the source table above; never
+   assume geographic order matches stop number order
+8. Truncated messages — if a message appears cut off,
+   complete the task based on available context; only ask
+   for clarification if the intent is genuinely ambiguous
 
 ## Current Build Status (March 28, 2026)
 - ✅ Homepage
@@ -167,3 +223,13 @@ Naming convention: {shop-id}-exterior.jpg,
 - west-end-bakery-exterior.jpg
 - west-end-bakery-interior.jpg
 - haywood-famous-interior.jpg
+
+## Lab Notes Protocol
+
+When you make a mistake or take a wrong approach, automatically append a lab note to this CLAUDE.md under ## Lab Notes without being asked. Format:
+[date] - what failed - why - what to do instead.
+
+## Lab Notes
+
+- 2026-03-27 - mapped streetSide values by stop number order — geographic position does not match stop number order on Haywood Road; always verify against the explicit shop table in this file
+
