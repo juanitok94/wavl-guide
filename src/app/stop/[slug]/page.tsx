@@ -109,9 +109,9 @@ export default function StopPage({ params }: { params: Promise<{ slug: string }>
     <main className="min-h-screen bg-[#f5edd8] text-[#1a1208]">
 
       {/* Phone capture modal — shown once if no cookie */}
-      {phoneLoaded && !phone && (
+      {/* {phoneLoaded && !phone && (
         <PhoneModal onSave={savePhone} />
-      )}
+      )} */}
 
       {/* HEADER — colored by sello */}
       <div
